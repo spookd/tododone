@@ -112,7 +112,7 @@ NAN_METHOD(TaskList::Get) {
 
     i = offset;
     
-    while(n != count && i < totalTasks) {
+    while(n != count && i <= totalTasks) {
         size_t idx = i++;
         task *t = &list->_tasks.at(idx);
 

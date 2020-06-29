@@ -1,4 +1,4 @@
-const TaskList = require("../todo");
+const TaskList = require("../taskList");
 const taskListFileName = require("path").join(__dirname, "test.db");
 const expect = require("expect.js");
 const fs = require("fs");
@@ -81,6 +81,22 @@ describe("Native Addon", function() {
 
         expect(task.title).to.be("Updated title");
         expect(task.isCompleted).to.be(true);
+    });
+
+    it("should not return a deleted record even though it's still there", function() {
+        let list, task;
+
+        list = new TaskList(taskListFileName);
+        
+        task = list.getTask(1);
+        task.delete();
+
+        const tasks = list.get();
+
+        expect(tasks).to.be.an("array");
+        expect(tasks.length).to.be(2);
+        expect(tasks[0].title).to.be("One");
+        expect(tasks[1].title).to.be("Three");
     });
     
 });
