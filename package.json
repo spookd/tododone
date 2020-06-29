@@ -1,0 +1,30 @@
+{
+  "name": "todo",
+  "version": "0.0.1",
+  "description": "Simple TODO task list",
+  "main": "index.js",
+  "bin": {
+    "tododone": "./bin/tododone"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "build:dev": "node-gyp -j 16 build --debug",
+    "build": "node-gyp -j 16 build",
+    "rebuild:dev": "node-gyp -j 16 rebuild --debug",
+    "rebuild": "node-gyp -j 16 rebuild",
+    "clean": "node-gyp clean",
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "blessed": "^0.1.81",
+    "commander": "^5.1.0",
+    "nan": "^2.14.1"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^8.0.1"
+  }
+}
