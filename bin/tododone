@@ -1,2 +1,77 @@
 #!/usr/bin/env node
-require("../index.js");
+
+const package = require("../package.json");
+const { program } = require("commander");
+const TaskList = require("../");
+let fileName;
+ 
+program
+    .version(package.version)
+    .description("Use a flag or launch the UI.")
+    .arguments("<file>")
+    .action(function(file) {
+        fileName = file;
+    })
+    .option("--add <text>", "Adds a new task with the text specified")
+    .option("--edit <number>", "The index of the task to edit")
+    .option("--complete <number>", "Sets the specified task ID as completed")
+    .option("--incomplete <number>", "Sets the specified task ID as completed")
+    .option("--delete <number>", "The index of the task to delete")
+    .option("--text <text>", "The text for the task")
+    .option("--list", "Lists all tasks")
+    .parse(process.argv);
+
+const list = new TaskList(fileName);
+
+if (program.add) {
+    const task = list.add(program.add);
+    list.save();
+
+    console.log(`Added a new task #${task.index}`);
+} else if (program.edit && program.text) {
+    try {
+        list.getTask(parseInt(idx, 10)).title = program.text;
+        list.save();
+        
+        console.log(`Edit task #${idx}`);
+    } catch(e) {
+        console.error(e.toString());
+    }
+} else if (program.delete) {
+    try {
+        list.delete(parseInt(program.delete, 10));
+        list.save();
+        
+        console.log(`Deleted task #${program.delete}`);
+    } catch(e) {
+        console.error(e.toString());
+    }
+} else if (program.complete) {
+    try {
+        list.getTask(parseInt(program.complete, 10)).isCompleted = true;
+        list.save();
+        
+        console.log(`Marked task #${program.complete} as COMPLETED`);
+    } catch(e) {
+        console.error(e.toString());
+    }
+} else if (program.incomplete) {
+    try {
+        list.getTask(parseInt(program.incomplete, 10)).isCompleted = false;
+        list.save();
+        
+        console.log(`Marked task #${program.incomplete} as INCOMPLETE`);
+    } catch(e) {
+        console.error(e.toString());
+    }
+} else if (program.list) {
+    try {
+        list.get().forEach(task => {
+            console.log(`#${task.index}${task.isCompleted ? " - COMPLETED" : ""}: ${task.title}`);
+        })
+    } catch(e) {
+        console.error(e.toString());
+    }
+} else {
+    require("../ui")(list);
+}

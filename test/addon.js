@@ -1,4 +1,4 @@
-const TaskList = require("../taskList");
+const TaskList = require("../");
 const taskListFileName = require("path").join(__dirname, "test.db");
 const expect = require("expect.js");
 const fs = require("fs");
